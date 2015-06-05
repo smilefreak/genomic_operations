@@ -9,7 +9,6 @@ def _merge_two_single_pos(temp_merge, dataset):
         First important this to generate a composite header of the two datasets
     """
     header = temp_merge.header + dataset.header
-    logging.info(dataset.header)
     position_list = SinglePositionList(SinglePosition, header)
     for temp_merge in temp_merge:
         for data in dataset:
@@ -22,9 +21,11 @@ def merge_single_pos(datasets, output):
     """
         Merges single position files
     """
+    logging.info("Merging {0} datasets".format(len(datasets)))
     no_datasets = len(datasets)
     temp_merge = datasets[0]
     for i in range(1, no_datasets):
         temp_merge = _merge_two_single_pos(temp_merge, datasets[1])
+    logging.info("Successfully merged {0} datasets".format(len(datasets)))    
     print_result(temp_merge, output)  
 

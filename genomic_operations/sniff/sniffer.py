@@ -1,3 +1,4 @@
+from genomic_operations.dts.single_pos import PSEQPos, GeminiPos, TwoColPos
 
 class Sniff(object):
     """
@@ -10,7 +11,6 @@ class Sniff(object):
         
     def add_sniffer_method(self, method, sniff_class):
         self.sniffer_list.append([method,sniff_class])
-        print self.sniffer_list
 
     def sniff_datatype(self, file_input):
         for sniffer, sniff_class in self.sniffer_list:
@@ -79,7 +79,28 @@ class PSEQSniffer(AbstractSnifferMethod):
                 if 'chr' in s_line[0] and ':' in s_line[0]:
                     return SniffResult(True ,header)
                 return SniffResult(False)
-       
+
+# Adjust gemini having 
+class GeminiSniffer(AbstractSnifferMethod):
+
+    def sniff_file(self, input_file):
+        header = None
+        with open(input_file) as in_file:
+            for line in in_file:
+                s_line = line.split()
+                if s_line[0] == 'chrom':
+                    header = s_line[3:]
+                    continue
+                if 'chr' in s_line[0]:
+                    try:
+                        start = int(s_line[1])
+                        end = int(s_line[2])
+                    except ValueError:
+                        return SniffResult(False)
+                    if (end - start) == 1:
+                        return SniffResult(True, header)
+                return SniffResult(False)
+    
 class TwoColSniffer(AbstractSnifferMethod):
 
     def sniff_file(self, input_file):
@@ -98,5 +119,17 @@ class TwoColSniffer(AbstractSnifferMethod):
                         pass
                 return SniffResult(False)  
 
+def setup_sniffers():
+    """
+        Creates sniffers for genomic datasets.
+
+        The order matters here as these are determined in order.
+    """
+    sniffer = Sniff()
+    sniffer.add_sniffer_method(PSEQSniffer() , PSEQPos)
+    sniffer.add_sniffer_method(GeminiSniffer(), GeminiSniffer)
+    sniffer.add_sniffer_method(TwoColSniffer(), TwoColPos)
+    return sniffer
 if __name__ == "__main__":
-    main()
+    import doctest
+    doctest.testmod()

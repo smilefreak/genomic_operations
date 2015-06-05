@@ -20,27 +20,19 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s' )
 import argparse
 import sys
 
-from genomic_operations.sniff.sniffer import Sniff, PSEQSniffer, TwoColSniffer
+from genomic_operations.sniff.sniffer import setup_sniffers 
 from genomic_operations.dts.single_pos import SinglePositionList
-from genomic_operations.dts.single_pos import PSEQPos, TwoColPos
+from genomic_operations.dts.single_pos import PSEQPos, TwoColPos, GeminiPos
 from genomic_operations.operations.merge import merge_single_pos
 
-def setup_sniffers():
-    """
-        Creates sniffers for genomic datasets.
-    """
-    sniffer = Sniff()
-    sniffer.add_sniffer_method(PSEQSniffer() , PSEQPos)
-    sniffer.add_sniffer_method(TwoColSniffer(), TwoColPos)
-    return sniffer
 
 def sniff_and_add_datasets(sniffer, genome_datasets):
     single_pos_list = [] 
-    logging.info("Sniffing and adding dataset\n")
+    logging.info("Sniffing and adding dataset")
     for i, genome_f in enumerate(genome_datasets):
         sniff_result = sniffer.sniff_datatype(genome_f)
         if sniff_result is None:
@@ -56,6 +48,7 @@ def sniff_and_add_datasets(sniffer, genome_datasets):
                 for j, line, in enumerate(gf):
                     if j >= start:
                         single_pos_list[i].append(sniff_result.sniffer_class(line))
+    logging.info("Successfully determined the filetypes of input files")
     return single_pos_list
 
 def main():
@@ -66,9 +59,9 @@ def main():
     parser = argparse.ArgumentParser(description="Genomic Arithmetic")
     subparsers = parser.add_subparsers(title='Arithmetic subcommands',
                                      description="Valid arithmetic subcommands")
-    parser.add_argument('-o','--output', dest='output', help='Output file')
     mer = subparsers.add_parser('merge')
     mer.add_argument('genome_files', nargs='*', help='Genome Arithmetic')
+    mer.add_argument('-o','--output', dest='output', help='Output file')
     mer.set_defaults(func=merge_single_pos)
     args = parser.parse_args()
     if args.output is None:

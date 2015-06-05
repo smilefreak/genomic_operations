@@ -118,3 +118,11 @@ class TwoColPos(SinglePosition):
         data = row[2:]
         super(TwoColPos, self).__init__(chrom, pos, data)
 
+class GeminiPos(SinglePosition):
+
+    def __init__(self, row):
+        row = row.split()
+        chrom = row[0]
+        pos = row[2]
+        data = row[3:]
+        super(GeminiPos, self).__init__(chrom, pos, data)

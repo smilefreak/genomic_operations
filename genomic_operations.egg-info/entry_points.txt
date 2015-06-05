@@ -1,0 +1,3 @@
+[console_scripts]
+genomic_operations = genomic_operations.genome_arithmetic:main
+
