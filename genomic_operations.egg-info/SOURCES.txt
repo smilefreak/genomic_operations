@@ -8,9 +8,6 @@ genomic_operations.egg-info/entry_points.txt
 genomic_operations.egg-info/not-zip-safe
 genomic_operations.egg-info/top_level.txt
 genomic_operations/dts/__init__.py
-genomic_operations/dts/bed.py
-genomic_operations/dts/beds.py
-genomic_operations/dts/pseq.py
 genomic_operations/dts/single_pos.py
 genomic_operations/operations/__init__.py
 genomic_operations/operations/merge.py

@@ -24,9 +24,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 import argparse
 import sys
 
-from genomic_operations.sniff.sniffer import setup_sniffers 
+from genomic_operations.sniff.sniffer import setup_sniffers
 from genomic_operations.dts.single_pos import SinglePositionList
-from genomic_operations.dts.single_pos import PSEQPos, TwoColPos, GeminiPos
 from genomic_operations.operations.merge import merge_single_pos
 
 
@@ -47,7 +46,7 @@ def sniff_and_add_datasets(sniffer, genome_datasets):
             with open(genome_f) as gf:
                 for j, line, in enumerate(gf):
                     if j >= start:
-                        single_pos_list[i].append(sniff_result.sniffer_class(line))
+                        single_pos_list[i].append(sniff_result.sniffer_class(line, j))
     logging.info("Successfully determined the filetypes of input files")
     return single_pos_list
 

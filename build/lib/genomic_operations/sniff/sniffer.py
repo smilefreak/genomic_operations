@@ -1,3 +1,4 @@
+import logging
 from genomic_operations.dts.single_pos import PSEQPos, GeminiPos, TwoColPos
 
 class Sniff(object):
@@ -122,11 +123,14 @@ class TwoColSniffer(AbstractSnifferMethod):
 def setup_sniffers():
     """
         Creates sniffers for genomic datasets.
+
+        The order matters here as these are determined in order.
     """
     sniffer = Sniff()
-    sniffer.add_sniffer_method(PSEQSniffer() , PSEQPos)
-    sniffer.add_sniffer_method(GeminiSniffer(), GeminiSniffer)
+    sniffer.add_sniffer_method(PSEQSniffer(), PSEQPos)
+    sniffer.add_sniffer_method(GeminiSniffer(), GeminiPos)
     sniffer.add_sniffer_method(TwoColSniffer(), TwoColPos)
     return sniffer
 if __name__ == "__main__":
-    main()
+    import doctest
+    doctest.testmod()

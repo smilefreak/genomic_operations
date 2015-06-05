@@ -1,4 +1,5 @@
 import sys
+import logging 
 
 class SinglePositionList(object):
 
@@ -32,16 +33,15 @@ class SinglePositionList(object):
                 self.header = ["NA"] * self.data_len
         # Must have a problem
         if self.data_len != val.data_len:
-            sys.stderr.write("Problem adding data, a line must have too many items\n")
+            logging.error("Problem adding data, line {0} has {1} items, expecting {2}".format(val.line_no, val.data_len, self.data_len))
             sys.exit(1)
         if not type(val) == self.data_type:
-            sys.stderr.write("Problem adding data, trying to use two datatypes at once\n")
+            logging.error("Problem adding data, using more than one datatype")
             sys.exit(1)
         self.position_list.append(val)
 
 class SinglePosition(object):
-   
-    def __init__(self, chrom, pos, data):
+    def __init__(self, chrom, pos, data, line_no=None):
         if 'chr' in chrom:
             # Remove a position that contains chromosome.
             chrom = chrom.split('chr')[1]
@@ -53,12 +53,17 @@ class SinglePosition(object):
             sys.exit(1)
         self._data = data
         self._data_len = len(data)
+        self._line_no = line_no
 
     def __eq__(self, position2):
         if self.chrom == position2.chrom:
             if self.pos == position2.pos:
                 return True
         return False
+    
+    @property
+    def line_no(self):
+        return self._line_no
 
     @property
     def data_len(self):
@@ -102,27 +107,27 @@ class SinglePosition(object):
         return self.chrom + '\t' + str(self.pos) +'\t' + self.get_data_string()
 
 class PSEQPos(SinglePosition): 
-    def __init__(self, row):
+    def __init__(self, row, line_no):
         row = row.split()
         chrom = row[0].split(':')[0]
         pos = row[0].split(':')[1]
         data = row[1:]
-        super(PSEQPos, self).__init__(chrom, pos, data)
+        super(PSEQPos, self).__init__(chrom, pos, data, line_no)
 
 class TwoColPos(SinglePosition):
 
-    def __init__(self, row):
+    def __init__(self, row, line_no):
         row = row.split()
         chrom = row[0]
         pos = row[1]
         data = row[2:]
-        super(TwoColPos, self).__init__(chrom, pos, data)
+        super(TwoColPos, self).__init__(chrom, pos, data, line_no)
 
 class GeminiPos(SinglePosition):
 
-    def __init__(self, row):
-        row = row.split()
+    def __init__(self, row, line_no):
+        row = row.split('\t')
         chrom = row[0]
         pos = row[2]
         data = row[3:]
-        super(GeminiPos, self).__init__(chrom, pos, data)
+        super(GeminiPos, self).__init__(chrom, pos, data, line_no)
