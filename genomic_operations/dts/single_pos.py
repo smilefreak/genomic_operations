@@ -123,7 +123,7 @@ class TwoColPos(SinglePosition):
         row = row.split()
         chrom = row[0]
         pos = row[1]
-        data = row[2:]
+        data = row[3:]
         super(TwoColPos, self).__init__(chrom, pos, data, line_no)
 
 class GeminiPos(SinglePosition):

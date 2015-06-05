@@ -110,7 +110,7 @@ class TwoColSniffer(AbstractSnifferMethod):
             for line in in_file:
                 s_line = line.split()
                 if s_line[0] == "chr":
-                    header = s_line[2:]
+                    header = s_line[3:]
                     continue
                 if  'chr' in s_line[0]:
                     try:

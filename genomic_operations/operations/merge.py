@@ -25,7 +25,7 @@ def merge_single_pos(datasets, output):
     no_datasets = len(datasets)
     temp_merge = datasets[0]
     for i in range(1, no_datasets):
-        temp_merge = _merge_two_single_pos(temp_merge, datasets[i])
+        temp_merge = merge_two_single_pos(temp_merge, datasets[i])
     logging.info("Successfully merged {0} datasets".format(len(datasets)))    
     print_result(temp_merge, output)  
 
