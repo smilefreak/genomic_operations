@@ -68,7 +68,7 @@ def main():
     else:
         args.output = open(args.output, 'w')
     sniffer = setup_sniffers()
-    datasets =  sniff_and_add_datasets(sniffer, args.genome_files)
+    datasets = sniff_and_add_datasets(sniffer, args.genome_files)
     args.func(datasets, args.output)
 
 if __name__ == "__main__":

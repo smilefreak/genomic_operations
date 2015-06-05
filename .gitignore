@@ -1,1 +1,3 @@
 genomic_operations/test_data/*
+build/*
+dist/*
