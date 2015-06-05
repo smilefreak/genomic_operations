@@ -57,6 +57,9 @@ class SinglePosition(object):
 
     def __eq__(self, position2):
         if self.chrom == position2.chrom:
+            logging.debug(self.chrom)
+            logging.debug(self.pos)
+            logging.debug(position2.pos)
             if self.pos == position2.pos:
                 return True
         return False
@@ -126,7 +129,7 @@ class TwoColPos(SinglePosition):
 class GeminiPos(SinglePosition):
 
     def __init__(self, row, line_no):
-        row = row.split('\t')
+        row = row.strip().split('\t')
         chrom = row[0]
         pos = row[2]
         data = row[3:]
